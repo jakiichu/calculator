@@ -72,7 +72,10 @@ const main = () => {
         } else if (state > 0) {
             print(state)
         }
-        if (state === "АС" || state === "С") {
+        if (state === "АС") {
+            calculationLine.splice(0, calculationLine.length-1);
+            print(0)
+        }if (state === "С"){
             print(0)
         }
 
