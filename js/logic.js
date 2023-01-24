@@ -1,15 +1,10 @@
 import {print, takeResult} from './utils/print.js'
 
 const main = () => {
-    let result = 0
     let calculationLine = []
     return (state) => {
         if (state === "="){
             calculationLine.push(takeResult())
-
-            if (calculationLine.indexOf("*")){
-
-            }
             for (let i = 0;i<calculationLine.length ;i++){
 
                 if (calculationLine.indexOf("x") !== -1){
