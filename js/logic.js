@@ -1,75 +1,58 @@
-import {print, takeResult} from './utils/print.js'
+import {print} from './utils/print.js'
 
 const main = () => {
     let calculationLine = []
+    let calculationNumber = "0"
+    let countArguments = [
+        {vision: "x", operand: '*'},
+        {vision: "/", operand: '/'},
+        {vision: "-", operand: '-'},
+        {vision: "+", operand: '+'}]
     return (state) => {
         if (state === "=") {
-            calculationLine.push(takeResult())
+            calculationLine.push(calculationNumber)
             for (let i = 0; i < calculationLine.length; i++) {
-                if (calculationLine.indexOf("x") !== -1) {
-                    let concat = calculationLine.indexOf("x")
-                    calculationLine[concat - 1] = calculationLine[concat - 1] * calculationLine[concat + 1]
-                    calculationLine.splice(concat, 2);
-                    if (calculationLine.length === 1) {
-                        print(calculationLine[0])
-                        calculationLine.splice(0, 1)
+                countArguments.map((item) => {
+                        let concat = calculationLine.indexOf(item.vision)
+                        if (calculationLine.indexOf(item.vision) !== -1) {
+                            calculationLine[concat - 1] = eval(calculationLine[concat - 1] + item.operand + calculationLine[concat + 1])
+                            calculationLine.splice(concat, 2);
+                        }
+
+                        if (calculationLine.length === 1) {
+                            calculationNumber = calculationLine[0]
+                            print(calculationNumber)
+                            calculationLine.splice(0, 1)
+                        }
                     }
-                } else if (calculationLine.indexOf("/") !== -1) {
-                    let concat = calculationLine.indexOf("/")
-                    calculationLine[concat - 1] = calculationLine[concat - 1] / calculationLine[concat + 1]
-                    calculationLine.splice(concat, 2);
-                    if (calculationLine.length === 1) {
-                        print(calculationLine[0])
-                        calculationLine.splice(0, 1)
-                    }
-                } else if (calculationLine.indexOf("-") !== -1) {
-                    let concat = calculationLine.indexOf("-")
-                    calculationLine[concat - 1] = Number(calculationLine[concat - 1]) - Number(calculationLine[concat + 1])
-                    calculationLine.splice(concat, 2);
-                    if (calculationLine.length === 1) {
-                        print(calculationLine[0])
-                        calculationLine.splice(0, 1)
-                    }
-                } else if (calculationLine.indexOf("+") !== -1) {
-                    let concat = calculationLine.indexOf("+")
-                    calculationLine[concat - 1] = Number(calculationLine[concat - 1]) + Number(calculationLine[concat + 1])
-                    calculationLine.splice(concat, 2);
-                    if (calculationLine.length === 1) {
-                        print(calculationLine[0])
-                        calculationLine.splice(0, 1)
-                    }
-                }
+                )
+
             }
         }
-
-        if (state === "/") {
-            calculationLine.push(takeResult())
-            calculationLine.push("/")
-            print(0)
-        } else if (state === "x") {
-            calculationLine.push(takeResult())
-            calculationLine.push("x")
-            print(0)
-        } else if (state === "-") {
-            calculationLine.push(takeResult())
-            calculationLine.push("-")
-            print(0)
-        } else if (state === "+") {
-            calculationLine.push(takeResult())
-            calculationLine.push("+")
-            print(0)
-        }
-        if (0 < state && takeResult() !== '0'||state==='.') {
-            print(takeResult() + state)
+        countArguments.map((item) => {
+            if (state === item.vision) {
+                calculationLine.push(calculationNumber)
+                calculationLine.push(item.vision)
+                calculationNumber = "0"
+                print(0)
+            }
+        })
+        if (state > 0 && calculationNumber !== '0' || state === '.') {
+            calculationNumber = String(calculationNumber) + String(state)
+            print(calculationNumber)
         } else if (state > 0) {
-            print(state)
+            calculationNumber = state
+            print(calculationNumber)
         }
+
         if (state === "АС") {
             calculationLine.splice(0, calculationLine.length);
-            print(0)
+            calculationNumber = 0
+            print(calculationNumber)
         }
         if (state === "С") {
-            print(0)
+            calculationNumber = 0
+            print(calculationNumber)
         }
     }
 }

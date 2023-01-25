@@ -4,9 +4,6 @@ const print = (message) => {
     container.innerHTML = message
 }
 
-const takeResult = () => {
-    const container = document.querySelector('[data-container="result"]')
-    return  container.innerHTML
-}
 
-export { print,takeResult }
+
+export { print }
