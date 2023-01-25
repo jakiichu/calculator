@@ -34,7 +34,7 @@ const main = () => {
                 calculationLine.push(calculationNumber)
                 calculationLine.push(item.vision)
                 calculationNumber = "0"
-                print(0)
+                print(calculationNumber)
             }
         })
         if (state > 0 && calculationNumber !== '0' || state === '.') {
@@ -47,11 +47,11 @@ const main = () => {
 
         if (state === "АС") {
             calculationLine.splice(0, calculationLine.length);
-            calculationNumber = 0
+            calculationNumber = "0"
             print(calculationNumber)
         }
         if (state === "С") {
-            calculationNumber = 0
+            calculationNumber = "0"
             print(calculationNumber)
         }
     }
