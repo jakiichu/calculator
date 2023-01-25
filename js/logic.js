@@ -40,8 +40,8 @@ const main = () => {
                     }
                 }
             }
-
         }
+
         if (state === "/") {
             calculationLine.push(takeResult())
             calculationLine.push("/")
