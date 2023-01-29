@@ -1,58 +1,94 @@
 import {print} from './utils/print.js'
 
+class calculation {
+    constructor(calculationLine) {
+        this.calculationLine = calculationLine;
+    }
+
+    calculationSet(symbol) {
+        this.calculationLine = symbol;
+    }
+
+    calculationLineSetter(symbol) {
+        this.calculationLine = this.calculationLine + symbol;
+    }
+
+    calculationLineGetter() {
+        return this.calculationLine;
+    }
+
+    evalLine() {
+        return eval(this.calculationLine)
+    }
+
+    lastSymbol() {
+        return this.calculationLine[this.calculationLine.length - 1]
+    }
+
+    deleteLastSymbol() {
+        if (this.calculationLine.length !== 1) {
+            this.calculationSet(this.calculationLine.slice(0, -1))
+            print(this.calculationLine)
+        } else {
+            this.calculationSet('0')
+            print(this.calculationLine)
+        }
+    }
+}
+
 const main = () => {
-    let calculationLine = []
-    let calculationNumber = "0"
     let countArguments = [
         {vision: "x", operand: '*'},
         {vision: "/", operand: '/'},
         {vision: "-", operand: '-'},
         {vision: "+", operand: '+'}]
+    let calc = new calculation('0')
     return (state) => {
-        if (state === "=") {
-            calculationLine.push(calculationNumber)
-            for (let i = 0; i < calculationLine.length; i++) {
-                countArguments.map((item) => {
-                        let concat = calculationLine.indexOf(item.vision)
-                        if (calculationLine.indexOf(item.vision) !== -1) {
-                            calculationLine[concat - 1] = eval(calculationLine[concat - 1] + item.operand + calculationLine[concat + 1])
-                            calculationLine.splice(concat, 2);
-                        }
-
-                        if (calculationLine.length === 1) {
-                            calculationNumber = calculationLine[0]
-                            print(calculationNumber)
-                            calculationLine.splice(0, 1)
-                        }
-                    }
-                )
+        if (state >= 0) {
+            if (state == 0) {
+                if (calc.calculationLineGetter() === '0') {
+                    calc.calculationSet(state)
+                    print(calc.calculationLineGetter())
+                } else {
+                    calc.calculationLineSetter(state)
+                    print(calc.calculationLineGetter())
+                }
+            } else if (state > 0) {
+                if (calc.calculationLineGetter() === '0') {
+                    calc.calculationSet(state)
+                    print(calc.calculationLineGetter())
+                } else {
+                    calc.calculationLineSetter(state)
+                    print(calc.calculationLineGetter())
+                }
 
             }
+
         }
-        countArguments.map((item) => {
-            if (state === item.vision) {
-                calculationLine.push(calculationNumber)
-                calculationLine.push(item.vision)
-                calculationNumber = "0"
-                print(calculationNumber)
+        countArguments.map((arg) => {
+            if (arg.vision === state) {
+                if (arg.vision !== calc.lastSymbol()) {
+                    calc.calculationLineSetter(arg.operand)
+                    print(calc.calculationLineGetter())
+                }
             }
         })
-        if (state > 0 && calculationNumber !== '0' || state === '.') {
-            calculationNumber = String(calculationNumber) + String(state)
-            print(calculationNumber)
-        } else if (state > 0) {
-            calculationNumber = state
-            print(calculationNumber)
+        if (state === '=') {
+            print(calc.evalLine())
+            calc.calculationSet(calc.evalLine())
         }
-
-        if (state === "АС") {
-            calculationLine.splice(0, calculationLine.length);
-            calculationNumber = "0"
-            print(calculationNumber)
+        if (state === 'АС') {
+            calc.calculationSet('0')
+            print(calc.calculationLineGetter())
         }
-        if (state === "С") {
-            calculationNumber = "0"
-            print(calculationNumber)
+        if (state === 'С') {
+            calc.deleteLastSymbol()
+        }
+        if (state === '.') {
+            if (state !== calc.lastSymbol()) {
+                calc.calculationLineSetter(state)
+                print(calc.calculationLineGetter())
+            }
         }
     }
 }
